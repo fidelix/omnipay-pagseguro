@@ -45,3 +45,7 @@ you can subscribe to.
 
 If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/abdala/omnipay-pagseguro/issues),
 or better yet, fork the library and submit a pull request.
+
+## Aimeos
+
+This fork is aims to provide compatibility with aimeos 2019.10 LTS.
