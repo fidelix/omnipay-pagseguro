@@ -37,6 +37,7 @@ class Gateway extends AbstractGateway
             'email' => '',
             'token' => '',
             'sandbox' => false,
+            'transactionReference' => '',
         ];
     }
 
@@ -68,6 +69,16 @@ class Gateway extends AbstractGateway
     public function setSandbox($value)
     {
         return $this->setParameter('sandbox', $value);
+    }
+
+    public function getTransactionReference()
+    {
+        return $this->getParameter('transactionReference');
+    }
+
+    public function setTransactionReference($value)
+    {
+        return $this->setParameter('transactionReference', $value);
     }
 
     public function purchase(array $parameters = [])
