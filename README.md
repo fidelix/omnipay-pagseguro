@@ -48,4 +48,4 @@ or better yet, fork the library and submit a pull request.
 
 ## Aimeos
 
-This fork is aims to provide compatibility with aimeos 2019.10 LTS.
+This fork aims to provide compatibility with aimeos 2019.10 LTS.
