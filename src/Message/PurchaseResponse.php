@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Omnipay\PagSeguro\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\Common\Message\RedirectResponseInterface;
 use function sprintf;
 use function str_replace;
 use function trim;
@@ -12,7 +13,7 @@ use function trim;
 /**
  * PagSeguro Response
  */
-class PurchaseResponse extends AbstractResponse
+class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
     public function isSuccessful()
     {
