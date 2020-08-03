@@ -13,7 +13,7 @@ use function trim;
 /**
  * PagSeguro Response
  */
-class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
+class PreApprovalResponse extends AbstractResponse implements RedirectResponseInterface
 {
     public function isSuccessful()
     {
@@ -31,8 +31,8 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
 
         if (!empty($this->data['code'])) {
             return sprintf(
-                '%s/%s/payment.html?code=%s',
-                str_replace('ws.', '', $request->getEndpoint()),
+                '%s/%s.html?code=%s',
+                $request->getWebEndpoint(),
                 trim($request->getResource(), '/'),
                 $this->data['code']
             );

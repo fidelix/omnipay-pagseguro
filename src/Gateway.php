@@ -6,6 +6,13 @@ namespace Omnipay\PagSeguro;
 
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\ResponseInterface;
+use Omnipay\PagSeguro\Message\AcceptNotificationRequest;
+use Omnipay\PagSeguro\Message\CompletePurchaseRequest;
+use Omnipay\PagSeguro\Message\FindTransactionRequest;
+use Omnipay\PagSeguro\Message\PreApprovalRequest;
+use Omnipay\PagSeguro\Message\PurchaseRequest;
+use Omnipay\PagSeguro\Message\RefundRequest;
+use Omnipay\PagSeguro\Message\TransactionSearchRequest;
 
 /**
  * PagSeguro Gateway
@@ -15,7 +22,6 @@ use Omnipay\Common\Message\ResponseInterface;
  * @method ResponseInterface authorize(array $options = [])
  * @method ResponseInterface completeAuthorize(array $options = [])
  * @method ResponseInterface capture(array $options = [])
- * @method ResponseInterface refund(array $options = [])
  * @method ResponseInterface void(array $options = [])
  * @method ResponseInterface createCard(array $options = [])
  * @method ResponseInterface updateCard(array $options = [])
@@ -24,7 +30,7 @@ use Omnipay\Common\Message\ResponseInterface;
 
 class Gateway extends AbstractGateway
 {
-    public const version = '2';
+    public const version = '3';
 
     public function getName()
     {
@@ -83,31 +89,37 @@ class Gateway extends AbstractGateway
 
     public function purchase(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\PagSeguro\\Message\\PurchaseRequest', $parameters);
+        return $this->createRequest(PurchaseRequest::class, $parameters);
     }
 
     public function refund(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\PagSeguro\\Message\\RefundRequest', $parameters);
+        return $this->createRequest(RefundRequest::class, $parameters);
     }
 
     public function completePurchase(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\PagSeguro\\Message\\CompletePurchaseRequest', $parameters);
-    }
-
-    public function findTransaction(array $parameters = []) : Message\FindTransactionRequest
-    {
-        return $this->createRequest('Omnipay\\PagSeguro\\Message\\FindTransactionRequest', $parameters);
+        return $this->createRequest(CompletePurchaseRequest::class, $parameters);
     }
 
     public function transactionSearch(array $parameters = []) : Message\TransactionSearchRequest
     {
-        return $this->createRequest('Omnipay\\PagSeguro\\Message\\TransactionSearchRequest', $parameters);
+        return $this->createRequest(TransactionSearchRequest::class, $parameters);
     }
 
-    public function fetchNotification(array $parameters = [])
+    public function fetchTransaction(array $parameters = []) : Message\FindTransactionRequest
     {
-        return $this->createRequest('Omnipay\\PagSeguro\\Message\\FetchNotificationRequest', $parameters);
+        return $this->createRequest(FindTransactionRequest::class, $parameters);
     }
+
+    public function acceptNotification(array $parameters = [])
+    {
+        return $this->createRequest(AcceptNotificationRequest::class, $parameters);
+    }
+
+    public function createPlan(array $parameters = [])
+    {
+        return $this->createRequest(PreApprovalRequest::class, $parameters);
+    }
+
 }

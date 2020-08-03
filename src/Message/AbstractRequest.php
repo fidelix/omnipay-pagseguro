@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Omnipay\PagSeguro\Message;
 
+use SimpleXMLElement;
 use function http_build_query;
 use function json_decode;
 use function json_encode;
@@ -16,6 +17,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     protected $endpoint        = 'https://ws.pagseguro.uol.com.br/v2';
     protected $sandboxEndpoint = 'https://ws.sandbox.pagseguro.uol.com.br/v2';
+    protected $webEndpoint        = 'https://pagseguro.uol.com.br/v2';
+    protected $webSandboxEndpoint = 'https://sandbox.pagseguro.uol.com.br/v2';
     protected $resource        = '';
 
     abstract protected function createResponse($data);
@@ -83,11 +86,19 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             trim($this->getResource(), '/'),
             http_build_query($data, '', '&')
         );
-
         $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
-        $xml          = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xml = simplexml_load_string(
+            $httpResponse->getBody()->getContents(),
+            'SimpleXMLElement',
+            LIBXML_NOCDATA
+        );
 
         return $this->createResponse($this->xml2array($xml));
+    }
+
+    public function getWebEndpoint()
+    {
+        return $this->getSandbox() ? $this->webSandboxEndpoint : $this->webEndpoint;
     }
 
     public function getEndpoint()

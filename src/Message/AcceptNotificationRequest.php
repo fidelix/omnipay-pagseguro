@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Omnipay\PagSeguro\Message;
 
+use Omnipay\Common\Http\ClientInterface;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use function http_build_query;
 use function simplexml_load_string;
 use function sprintf;
 use const LIBXML_NOCDATA;
+
 /*
  * PagSeguro Fetch Notification Request
  *
@@ -15,7 +18,7 @@ use const LIBXML_NOCDATA;
  *
  */
 
-class FetchNotificationRequest extends AbstractRequest
+class AcceptNotificationRequest extends AbstractRequest
 {
     protected $endpoint        = 'https://ws.pagseguro.uol.com.br/v3';
     protected $sandboxEndpoint = 'https://ws.sandbox.pagseguro.uol.com.br/v3';
@@ -24,11 +27,6 @@ class FetchNotificationRequest extends AbstractRequest
     public function getNotificationCode()
     {
         return $this->getParameter('notificationCode');
-    }
-
-    public function getHttpMethod()
-    {
-        return 'GET';
     }
 
     public function setNotificationCode($value)
@@ -48,14 +46,19 @@ class FetchNotificationRequest extends AbstractRequest
             http_build_query($data, '', '&')
         );
 
-        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
-        $xml          = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $httpResponse = $this->httpClient->request('GET', $url, $this->getHeaders());
+        $xml = simplexml_load_string(
+            $httpResponse->getBody()->getContents(),
+            'SimpleXMLElement',
+            LIBXML_NOCDATA
+        );
 
-        return $this->createResponse($this->xml2array($xml));
+        $this->response = new AcceptNotificationResponse($this, $this->xml2array($xml));
+        return $this->response;
     }
 
     public function createResponse($data)
     {
-        return $this->response = new FetchNotificationResponse($this, $data);
+        return new AcceptNotificationResponse($this, $data);
     }
 }
